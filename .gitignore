@@ -31,3 +31,6 @@ local.properties
 
 # OS specific
 .DS_Store
+
+# Android specific
+gen/
