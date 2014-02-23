@@ -1,6 +1,9 @@
 package com.hashtag.phillybusfinder.fragments;
 
+import java.util.ArrayList;
+
 import com.hashtag.phillybusfinder.R;
+import com.hashtag.phillybusfinder.models.BusStop;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,5 +34,13 @@ public class NearbyFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mTabHost = null;
+    }
+
+    public interface DataPullingInterface {
+        public double getLatitude();
+
+        public double getLongitude();
+
+        public ArrayList<BusStop> getBusStops();
     }
 }

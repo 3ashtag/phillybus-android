@@ -17,11 +17,12 @@ import com.hashtag.phillybusfinder.client.RestClient.RequestMethod;
 import com.hashtag.phillybusfinder.client.RestTask;
 import com.hashtag.phillybusfinder.fragments.MenuFragment;
 import com.hashtag.phillybusfinder.fragments.NearbyFragment;
+import com.hashtag.phillybusfinder.fragments.NearbyFragment.DataPullingInterface;
 import com.hashtag.phillybusfinder.models.BusStop;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.CanvasTransformer;
 
-public class LandingActivity extends SlidingSherlockFragmentActivity implements RestTask.RestCallback {
+public class LandingActivity extends SlidingSherlockFragmentActivity implements RestTask.RestCallback, DataPullingInterface {
 
     private static final String TAG = LandingActivity.class.getSimpleName();
     private Fragment mContent;
@@ -106,5 +107,20 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public double getLatitude() {
+        return mLatitude;
+    }
+
+    @Override
+    public double getLongitude() {
+        return mLongitude;
+    }
+
+    @Override
+    public ArrayList<BusStop> getBusStops() {
+        return mBusStops;
     }
 }
