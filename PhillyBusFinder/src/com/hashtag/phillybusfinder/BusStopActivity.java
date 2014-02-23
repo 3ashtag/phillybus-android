@@ -2,22 +2,25 @@ package com.hashtag.phillybusfinder;
 
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.hashtag.phillybusfinder.client.RestClient;
 import com.hashtag.phillybusfinder.client.RestClient.RequestMethod;
 import com.hashtag.phillybusfinder.client.RestTask;
 import com.hashtag.phillybusfinder.models.BusSchedule;
-import com.hashtag.phillybusfinder.ui.BusScheduleAdapter;
 
 public class BusStopActivity extends SherlockActivity implements RestTask.RestCallback {
 
@@ -28,7 +31,7 @@ public class BusStopActivity extends SherlockActivity implements RestTask.RestCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.arrivals_list);
+        setContentView(R.layout.list);
 
         mList = (ListView) findViewById(android.R.id.list);
 
@@ -36,6 +39,7 @@ public class BusStopActivity extends SherlockActivity implements RestTask.RestCa
         String id = intent.getStringExtra("id");
         String name = intent.getStringExtra("name");
         getSupportActionBar().setTitle(name);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String url = "http://phillybusfinder.com/api/stops/schedules?stopId=" + id;
         RestClient client = new RestClient(url, RequestMethod.GET);
@@ -44,8 +48,19 @@ public class BusStopActivity extends SherlockActivity implements RestTask.RestCa
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onComplete(JSONArray response) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeDeserializer()).create();
+
         ArrayList<String> busSchedules = new ArrayList<String>();
         for (int i = 0; i < response.length(); i++) {
             try {
@@ -58,10 +73,6 @@ public class BusStopActivity extends SherlockActivity implements RestTask.RestCa
                 e.printStackTrace();
             }
         }
-
-        ArrayAdapter<String> itemAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-                android.R.id.text1, busSchedules);
-        mList.setAdapter(itemAdapter);
+        mList.setAdapter(new ArrayAdapter<BusSchedule>(this, android.R.layout.simple_list_item_1, mBusSchedules));
     }
-
 }

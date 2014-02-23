@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
 import com.hashtag.phillybusfinder.client.RestClient;
 import com.hashtag.phillybusfinder.client.RestClient.RequestMethod;
@@ -88,8 +89,8 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
             }
         });
 
-        setSlidingActionBarEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setSlidingActionBarEnabled(true);
     }
 
     @Override
@@ -98,7 +99,6 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
         getSupportFragmentManager().putFragment(outState, "mContent", mContent);
         if (mBusStops != null && !mBusStops.isEmpty()) {
             outState.putParcelableArrayList("busStops", mBusStops);
-            Log.d(TAG, "Saving mBusStops to the bundle.");
         }
     }
 
@@ -122,7 +122,6 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
                 String jsonString = response.getJSONObject(i).toString();
                 BusStop busStop = gson.fromJson(jsonString, BusStop.class);
                 mBusStops.add(busStop);
-                Log.d(TAG, "Adding " + busStop.getName() + " to mBusStops.");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -166,5 +165,15 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                toggle();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

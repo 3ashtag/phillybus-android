@@ -3,7 +3,6 @@ package com.hashtag.phillybusfinder.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +12,17 @@ import android.widget.FrameLayout;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hashtag.phillybusfinder.BusStopActivity;
-import com.hashtag.phillybusfinder.DatabaseAdapter;
 import com.hashtag.phillybusfinder.fragments.NearbyFragment.DataPullingInterface;
 import com.hashtag.phillybusfinder.models.BusStop;
 
-public class NearbyMapFragment extends SupportMapFragment implements OnMarkerClickListener {
+public class NearbyMapFragment extends SupportMapFragment implements OnInfoWindowClickListener {
 
-    private static final String TAG = NearbyMapFragment.class.getSimpleName();
     private DataPullingInterface mHostInterface = null;
 
     @Override
@@ -34,7 +31,7 @@ public class NearbyMapFragment extends SupportMapFragment implements OnMarkerCli
 
         GoogleMap map = getMap();
         map.getUiSettings().setZoomControlsEnabled(false);
-        map.setOnMarkerClickListener(this);
+        map.setOnInfoWindowClickListener(this);
 
         if (mHostInterface != null) {
             update(mHostInterface);
@@ -62,8 +59,8 @@ public class NearbyMapFragment extends SupportMapFragment implements OnMarkerCli
         GoogleMap map = getMap();
 
         for (BusStop busStop : hostInterface.getBusStops()) {
-            Log.d(TAG, "Adding " + busStop.getName() + " to Google Maps.");
-            map.addMarker(new MarkerOptions().title(busStop.getName()).snippet(busStop.getId().toString()).position(new LatLng(busStop.getLat(), busStop.getLon())));
+            map.addMarker(new MarkerOptions().title(busStop.getName()).snippet(busStop.getId().toString())
+                    .position(new LatLng(busStop.getLat(), busStop.getLon())));
         }
 
         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(hostInterface.getLatitude(), hostInterface
@@ -75,16 +72,13 @@ public class NearbyMapFragment extends SupportMapFragment implements OnMarkerCli
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
-        BusStop busStop = mHostInterface.getBusStops().get(Integer.parseInt(marker.getSnippet()));
+    public void onInfoWindowClick(Marker marker) {
         Intent i = new Intent(getActivity(), BusStopActivity.class);
-        i.putExtra("id", busStop.getId().toString());
-        i.putExtra("name", busStop.getName());
+        i.putExtra("id", marker.getSnippet());
+        i.putExtra("name", marker.getTitle());
         startActivity(i);
-        
-        DatabaseAdapter db = new DatabaseAdapter(getActivity());
-        db.insert(busStop);
-        
-        return true;
+
+//        DatabaseAdapter db = new DatabaseAdapter(getActivity());
+//        db.insert(busStop);
     }
 }

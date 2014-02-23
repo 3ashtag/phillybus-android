@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 
 public class BusSchedule {
     private String route;
-    private DateTime string;
+    private DateTime time;
     private Integer offset;
     private String warnings;
 
@@ -16,12 +16,16 @@ public class BusSchedule {
         this.route = route;
     }
 
-    public DateTime getString() {
-        return string;
+    public DateTime getTime() {
+        return time;
     }
 
-    public void setString(DateTime string) {
-        this.string = string;
+    public void setString(DateTime time) {
+        this.time = time;
+    }
+
+    public void setString(String time) {
+        this.time = new DateTime(time);
     }
 
     public Integer getOffset() {
@@ -38,5 +42,20 @@ public class BusSchedule {
 
     public void setWarnings(String warnings) {
         this.warnings = warnings;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Route " + route);
+        builder.append(", ");
+        builder.append(time.toString("h:mm aa"));
+        builder.append(", ");
+        if (offset > 0) {
+            builder.append(offset.toString() + " Min Late");
+        } else {
+            builder.append("On Time");
+        }
+        return builder.toString();
     }
 }
