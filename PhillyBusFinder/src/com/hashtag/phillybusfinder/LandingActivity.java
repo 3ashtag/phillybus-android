@@ -8,10 +8,10 @@ import org.json.JSONException;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.actionbarsherlock.view.Menu;
 import com.google.gson.Gson;
-import com.hashtag.phillybusfinder.client.RestCallback;
 import com.hashtag.phillybusfinder.client.RestClient;
 import com.hashtag.phillybusfinder.client.RestClient.RequestMethod;
 import com.hashtag.phillybusfinder.client.RestTask;
@@ -21,8 +21,9 @@ import com.hashtag.phillybusfinder.models.BusStop;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.CanvasTransformer;
 
-public class LandingActivity extends SlidingSherlockFragmentActivity implements RestCallback {
+public class LandingActivity extends SlidingSherlockFragmentActivity implements RestTask.RestCallback {
 
+    private static final String TAG = LandingActivity.class.getSimpleName();
     private Fragment mContent;
     private double mLatitude;
     private double mLongitude;
@@ -35,6 +36,7 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
         if (savedInstanceState != null) {
             mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
             mBusStops = savedInstanceState.getParcelableArrayList("busStops");
+            Log.d(TAG, "Loading mBusStops from the bundle.");
         } else {
             mContent = new NearbyFragment();
             mLatitude = 39.956272999999996;
@@ -75,6 +77,7 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
         getSupportFragmentManager().putFragment(outState, "mContent", mContent);
         if (mBusStops != null && !mBusStops.isEmpty()) {
             outState.putParcelableArrayList("busStops", mBusStops);
+            Log.d(TAG, "Saving mBusStops to the bundle.");
         }
     }
 
@@ -98,6 +101,7 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
                 String jsonString = response.getJSONObject(i).toString();
                 BusStop busStop = gson.fromJson(jsonString, BusStop.class);
                 mBusStops.add(busStop);
+                Log.d(TAG, "Adding " + busStop.getName() + " to mBusStops.");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

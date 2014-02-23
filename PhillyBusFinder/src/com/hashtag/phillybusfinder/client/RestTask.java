@@ -55,4 +55,8 @@ public class RestTask extends AsyncTask<RestClient, Void, List<JSONArray>> {
             mCallback.onComplete(response);
         }
     }
+    
+    public interface RestCallback {
+        void onComplete(JSONArray response);
+    }
 }
