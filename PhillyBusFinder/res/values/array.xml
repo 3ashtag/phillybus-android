@@ -2,7 +2,6 @@
 <resources>
 
     <string-array name="menu_items">
-        <item>Search</item>
         <item>Nearby</item>
         <item>Recent</item>
         <item>About</item>

@@ -34,16 +34,13 @@ public class MenuFragment extends ListFragment {
 
         switch (position) {
             case 0:
-                newContent = new DummyFragment();
+                newContent = new NearbyFragment();
                 break;
             case 1:
-                newContent = new DummyFragment();
+                newContent = new RecentFragment();
                 break;
             case 2:
-                newContent = new DummyFragment();
-                break;
-            case 3:
-                newContent = new DummyFragment();
+                newContent = new AboutFragment();
                 break;
         }
 

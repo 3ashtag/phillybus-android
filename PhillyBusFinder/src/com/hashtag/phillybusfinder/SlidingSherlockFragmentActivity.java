@@ -45,8 +45,9 @@ public class SlidingSherlockFragmentActivity extends SherlockFragmentActivity im
     @Override
     public View findViewById(int id) {
         View v = super.findViewById(id);
-        if (v != null)
+        if (v != null) {
             return v;
+        }
         return mHelper.findViewById(id);
     }
 
@@ -188,8 +189,9 @@ public class SlidingSherlockFragmentActivity extends SherlockFragmentActivity im
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         boolean b = mHelper.onKeyUp(keyCode, event);
-        if (b)
+        if (b) {
             return b;
+        }
         return super.onKeyUp(keyCode, event);
     }
 

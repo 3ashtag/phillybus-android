@@ -2,5 +2,7 @@
 <resources>
 
     <string name="app_name">PhillyBusFinder</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="about">PhillyBusFinder is an app that helps manage the uncertainties that come when trying to catch a bus in Philadelphia. Often times buses are late, but it can be difficult to tell how late. This leaves you with no other option than waiting on the side of the road. Now, with PhillyBusFinder, you can finally look up how late your bus is so you can spend those 10 minutes inside where it’s warm.\n\nThis app was made for the Philly CodeFest 2014 by Mike Henry, Tim Hahn, Jarrad Battaglia, Jared Roberts, and Kurt Wheeler.</string>
 
 </resources>
