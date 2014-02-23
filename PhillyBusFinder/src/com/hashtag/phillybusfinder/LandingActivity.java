@@ -58,15 +58,12 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
             if (location != null) {
                 mLatitude = location.getLatitude();
                 mLongitude = location.getLongitude();
-            } else {
-                mLatitude = 39.956272999999996;
-                mLongitude = -75.19286799999998;
-            }
 
-            String url = "http://phillybusfinder.com/api/stops/nearby?lat=" + mLatitude + "&long=" + mLongitude;
-            RestClient client = new RestClient(url, RequestMethod.GET);
-            RestTask task = new RestTask(this, this);
-            task.execute(client);
+                String url = "http://phillybusfinder.com/api/stops/nearby?lat=" + mLatitude + "&long=" + mLongitude;
+                RestClient client = new RestClient(url, RequestMethod.GET);
+                RestTask task = new RestTask(this, this);
+                task.execute(client);
+            }
         }
 
         setContentView(R.layout.content_frame);
