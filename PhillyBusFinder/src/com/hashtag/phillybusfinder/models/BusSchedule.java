@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 public class BusSchedule {
     private String route;
+    private String direction;
     private DateTime time;
     private Integer offset;
     private String warnings;
@@ -15,16 +16,24 @@ public class BusSchedule {
     public void setRoute(String route) {
         this.route = route;
     }
+    
+    public String getDirection() {
+        return direction;
+    }
 
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+    
     public DateTime getTime() {
         return time;
     }
 
-    public void setString(DateTime time) {
+    public void setTime(DateTime time) {
         this.time = time;
     }
 
-    public void setString(String time) {
+    public void setTime(String time) {
         this.time = new DateTime(time);
     }
 
