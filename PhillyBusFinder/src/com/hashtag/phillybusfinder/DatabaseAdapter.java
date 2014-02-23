@@ -20,7 +20,7 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query;
-        query = "CREATE TABLE RecentStops ( id INT PRIMARY KEY NOT NULL, stop_id INT NOT NULL, stop_name TEXT NOT NULL )";
+        query = "CREATE TABLE RecentStops ( _id INTEGER PRIMARY KEY NOT NULL, stop_id INTEGER NOT NULL, stop_name TEXT NOT NULL )";
         db.execSQL(query);
     }
 
@@ -33,23 +33,28 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
 
     public void insert(BusStop busStop) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("stop_id", busStop.getId());
-        values.put("stop_name", busStop.getName());
-        db.insert("RecentStops", null, values);
+        String query = "SELECT * FROM  RecentStops WHERE stop_id IS " + busStop.getId();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() < 1) {
+            ContentValues values = new ContentValues();
+            values.put("stop_id", busStop.getId());
+            values.put("stop_name", busStop.getName());
+            db.insert("RecentStops", null, values);
+        }
+        cursor.close();
         db.close();
     }
 
     public List<BusStop> getAll() {
         List<BusStop> busStops = new ArrayList<BusStop>();
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM  RecentStops";
+        String query = "SELECT * FROM  RecentStops ORDER BY _id DESC LIMIT 20";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
                 BusStop busStop = new BusStop();
-                busStop.setId(cursor.getInt(0));
-                busStop.setName(cursor.getString(1));
+                busStop.setId(cursor.getInt(1));
+                busStop.setName(cursor.getString(2));
                 busStops.add(busStop);
             } while (cursor.moveToNext());
         }

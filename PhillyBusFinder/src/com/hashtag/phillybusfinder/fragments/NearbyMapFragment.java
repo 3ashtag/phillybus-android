@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hashtag.phillybusfinder.BusStopActivity;
+import com.hashtag.phillybusfinder.DatabaseAdapter;
 import com.hashtag.phillybusfinder.fragments.NearbyFragment.DataPullingInterface;
 import com.hashtag.phillybusfinder.models.BusStop;
 
@@ -78,7 +79,10 @@ public class NearbyMapFragment extends SupportMapFragment implements OnInfoWindo
         i.putExtra("name", marker.getTitle());
         startActivity(i);
 
-//        DatabaseAdapter db = new DatabaseAdapter(getActivity());
-//        db.insert(busStop);
+        BusStop busStop = new BusStop();
+        busStop.setId(Integer.parseInt(marker.getSnippet()));
+        busStop.setName(marker.getTitle());
+        DatabaseAdapter db = new DatabaseAdapter(getActivity());
+        db.insert(busStop);
     }
 }
