@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.hashtag.phillybusfinder.BusStopActivity;
+import com.hashtag.phillybusfinder.DatabaseAdapter;
 import com.hashtag.phillybusfinder.R;
 import com.hashtag.phillybusfinder.fragments.NearbyFragment.DataPullingInterface;
 import com.hashtag.phillybusfinder.models.BusStop;
@@ -32,16 +33,6 @@ public class NearbyListFragment extends ListFragment {
 
         return v;
     }
-
-    // @Override
-    // public void onActivityCreated(Bundle savedInstanceState) {
-    // super.onActivityCreated(savedInstanceState);
-    // String[] items = getResources().getStringArray(R.array.menu_items);
-    // ArrayAdapter<String> itemAdapter = new ArrayAdapter<String>(getActivity(),
-    // android.R.layout.simple_list_item_1,
-    // android.R.id.text1, items);
-    // setListAdapter(itemAdapter);
-    // }
 
     @Override
     public void onAttach(Activity activity) {
@@ -71,5 +62,8 @@ public class NearbyListFragment extends ListFragment {
         i.putExtra("id", busStop.getId().toString());
         i.putExtra("name", busStop.getName());
         startActivity(i);
+
+        DatabaseAdapter db = new DatabaseAdapter(getActivity());
+        db.insert(busStop);
     }
 }

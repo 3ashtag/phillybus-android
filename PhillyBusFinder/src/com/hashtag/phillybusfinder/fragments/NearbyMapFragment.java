@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hashtag.phillybusfinder.BusStopActivity;
+import com.hashtag.phillybusfinder.DatabaseAdapter;
 import com.hashtag.phillybusfinder.fragments.NearbyFragment.DataPullingInterface;
 import com.hashtag.phillybusfinder.models.BusStop;
 
@@ -75,10 +76,15 @@ public class NearbyMapFragment extends SupportMapFragment implements OnMarkerCli
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        BusStop busStop = mHostInterface.getBusStops().get(Integer.parseInt(marker.getSnippet()));
         Intent i = new Intent(getActivity(), BusStopActivity.class);
-        i.putExtra("id", marker.getSnippet());
-        i.putExtra("name", marker.getTitle());
+        i.putExtra("id", busStop.getId().toString());
+        i.putExtra("name", busStop.getName());
         startActivity(i);
-        return false;
+        
+        DatabaseAdapter db = new DatabaseAdapter(getActivity());
+        db.insert(busStop);
+        
+        return true;
     }
 }

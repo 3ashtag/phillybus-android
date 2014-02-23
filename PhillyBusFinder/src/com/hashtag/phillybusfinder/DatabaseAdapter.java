@@ -20,7 +20,7 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query;
-        query = "CREATE TABLE RecentStops ( id INT NOT NULL AUTO_INCREMENT, stop_id INT, stop_name TEXT, PRIMARY KEY  (id) )";
+        query = "CREATE TABLE RecentStops ( id INT PRIMARY KEY NOT NULL, stop_id INT NOT NULL, stop_name TEXT NOT NULL )";
         db.execSQL(query);
     }
 
@@ -53,6 +53,8 @@ public class DatabaseAdapter extends SQLiteOpenHelper {
                 busStops.add(busStop);
             } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
         return busStops;
     }
 

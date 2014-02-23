@@ -11,10 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.hashtag.phillybusfinder.R;
+import com.hashtag.phillybusfinder.models.BusSchedule;
 
-public class NowArrayAdapter extends ArrayAdapter<String> {
+public class BusScheduleAdapter extends ArrayAdapter<String> {
 
-    private ArrayList<String> mValues;
+    private ArrayList<BusSchedule> mBusSchedules;
     private Typeface mFontFace;
     private LayoutInflater mInflater;
 
@@ -22,13 +23,13 @@ public class NowArrayAdapter extends ArrayAdapter<String> {
         TextView descText;
     }
 
-    public NowArrayAdapter(Context context, ArrayList<String> commandsList) {
-        super(context, R.layout.list_item, commandsList);
-        mValues = new ArrayList<String>();
-        mValues.addAll(commandsList);
-        Context appContext = context.getApplicationContext();
-        mFontFace = Util.getTypeface(appContext, "fonts/SourceSansPro-ExtraLight.ttf");
-        mInflater = LayoutInflater.from(appContext);
+    public BusScheduleAdapter(Context context, ArrayList<BusSchedule> commandsList) {
+        super(context, R.layout.list_item);
+        Context applicationContext = context.getApplicationContext();
+        mBusSchedules = new ArrayList<BusSchedule>();
+        mBusSchedules.addAll(commandsList);
+        mFontFace = Util.getTypeface(applicationContext, "fonts/SourceSansPro-ExtraLight.ttf");
+        mInflater = LayoutInflater.from(applicationContext);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {

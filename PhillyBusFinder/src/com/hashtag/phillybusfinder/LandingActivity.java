@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.content.Context;
 import android.graphics.Canvas;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,10 +27,13 @@ import com.hashtag.phillybusfinder.models.BusStop;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.CanvasTransformer;
 
-public class LandingActivity extends SlidingSherlockFragmentActivity implements RestTask.RestCallback, DataPullingInterface {
+public class LandingActivity extends SlidingSherlockFragmentActivity implements RestTask.RestCallback, DataPullingInterface,
+        LocationListener {
 
     private static final String TAG = LandingActivity.class.getSimpleName();
     private Fragment mContent;
+    private LocationManager mLocationManager;
+    private String mProvider;
     private double mLatitude;
     private double mLongitude;
     private ArrayList<BusStop> mBusStops = new ArrayList<BusStop>();
@@ -40,8 +48,20 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
             Log.d(TAG, "Loading mBusStops from the bundle.");
         } else {
             mContent = new NearbyFragment();
-            mLatitude = 39.956272999999996;
-            mLongitude = -75.19286799999998;
+
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            mProvider = mLocationManager.getBestProvider(criteria, false);
+            Location location = mLocationManager.getLastKnownLocation(mProvider);
+
+            if (location != null) {
+                mLatitude = location.getLatitude();
+                mLongitude = location.getLongitude();
+            } else {
+                mLatitude = 39.956272999999996;
+                mLongitude = -75.19286799999998;
+            }
+
             String url = "http://phillybusfinder.com/api/stops/nearby?lat=" + mLatitude + "&long=" + mLongitude;
             RestClient client = new RestClient(url, RequestMethod.GET);
             RestTask task = new RestTask(this, this);
@@ -122,5 +142,29 @@ public class LandingActivity extends SlidingSherlockFragmentActivity implements 
     @Override
     public ArrayList<BusStop> getBusStops() {
         return mBusStops;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLatitude = location.getLatitude();
+        mLongitude = location.getLongitude();
+    }
+
+    @Override
+    public void onProviderDisabled(String string) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onProviderEnabled(String string) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO Auto-generated method stub
+
     }
 }
